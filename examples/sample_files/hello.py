@@ -31,7 +31,7 @@ def greet(name: str) -> None:
 
 
 def main() -> None:
-    """Main function."""
+    """Execute the main program logic."""
     if len(sys.argv) > 1:
         name = sys.argv[1]
     else:

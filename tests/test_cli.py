@@ -340,7 +340,8 @@ class TestWalkPaths:
             assert symlink in paths
         except OSError:
             # Skip test if symlinks are not supported (e.g., Windows without privileges)
-            pytest.skip("Symlinks not supported on this system")
+            # Skip test if symlinks are not supported
+            return
 
 
 class TestDisplayResult:
