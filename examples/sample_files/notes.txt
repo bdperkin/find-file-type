@@ -1,0 +1,34 @@
+Find File Type (fft) - Development Notes
+==========================================
+
+This is a plain text file used for testing the fft tool's file type detection capabilities.
+
+Features to implement:
+- Filesystem tests: Check file extensions, permissions, and attributes
+- Magic tests: Analyze file signatures and magic bytes
+- Language tests: Pattern matching for programming languages
+
+Common file types to support:
+- Programming languages: Python, JavaScript, Java, C/C++, etc.
+- Documents: PDF, Word, Excel, PowerPoint, text files
+- Images: JPEG, PNG, GIF, SVG, TIFF, BMP
+- Audio/Video: MP3, MP4, AVI, WAV, FLAC
+- Archives: ZIP, TAR, GZIP, RAR, 7-Zip
+- Data formats: JSON, XML, CSV, YAML
+
+Test cases:
+1. Files with standard extensions
+2. Files without extensions
+3. Files with misleading extensions
+4. Binary files
+5. Empty files
+6. Directories
+7. Symbolic links
+
+Performance considerations:
+- Limit file reading to prevent memory issues with large files
+- Use efficient regex patterns for language detection
+- Cache results when possible
+- Handle encoding issues gracefully
+
+This tool should be fast, accurate, and reliable for everyday use.

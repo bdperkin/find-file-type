@@ -1,0 +1,44 @@
+{
+    "name": "find-file-type",
+    "version": "1.0.0",
+    "description": "A command line tool to determine file types",
+    "main": "src/fft/cli.py",
+    "scripts": {
+        "test": "pytest",
+        "lint": "flake8 src/fft/",
+        "format": "black src/fft/"
+    },
+    "keywords": [
+        "file",
+        "type",
+        "detection",
+        "cli",
+        "filesystem",
+        "magic"
+    ],
+    "author": "Find File Type",
+    "license": "MIT",
+    "dependencies": {
+        "python-magic": ">=0.4.27",
+        "click": ">=8.0.0"
+    },
+    "devDependencies": {
+        "pytest": ">=7.0.0",
+        "black": ">=22.0.0",
+        "flake8": ">=5.0.0"
+    },
+    "files": [
+        "*.py",
+        "*.txt",
+        "*.md",
+        "*.json"
+    ],
+    "config": {
+        "max_file_size": "1MB",
+        "supported_encodings": [
+            "utf-8",
+            "latin-1",
+            "cp1252"
+        ]
+    }
+}

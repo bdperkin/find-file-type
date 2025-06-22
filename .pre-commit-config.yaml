@@ -1,0 +1,152 @@
+# Pre-commit configuration for find-file-type project
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+  # General file formatting and checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+
+  # Python import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args:
+          [
+            "--profile",
+            "black",
+            "--line-length",
+            "88",
+            "--multi-line",
+            "3",
+            "--trailing-comma",
+            "--force-grid-wrap",
+            "0",
+            "--combine-as",
+            "--src",
+            "src",
+          ]
+
+  # Python code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3
+        args: ["--line-length", "88"]
+
+  # Python linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-docstrings
+          - flake8-bugbear
+          - flake8-comprehensions
+          - flake8-simplify
+        args:
+          [
+            "--max-line-length",
+            "88",
+            "--extend-ignore",
+            "E203,W503,D100,D101,D102,D103,D104,D105,D106,D107",
+            "--per-file-ignores",
+            "tests/*:D,__init__.py:F401",
+          ]
+
+  # Python type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-setuptools]
+        args:
+          [
+            "--config-file",
+            "pyproject.toml",
+            "--show-error-codes",
+            "--show-error-context",
+          ]
+
+  # Security linting
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+
+  # Python upgrade syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args: [--py38-plus]
+
+  # Docstring formatting
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args:
+          [
+            "--convention=google",
+            "--add-ignore=D100,D101,D102,D103,D104,D105,D106,D107",
+          ]
+
+  # YAML formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        types: [yaml]
+        args: [--tab-width, "2"]
+
+  # Local hooks for project-specific checks
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args: ["tests/", "--tb=short", "-x"]
+        stages: [pre-commit]
+
+      - id: coverage-check
+        name: coverage-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args:
+          [
+            "tests/",
+            "--cov=fft",
+            "--cov-report=term-missing",
+            "--cov-fail-under=90",
+          ]
+        stages: [pre-push]
+
+# Configuration for specific hooks
+default_stages: [pre-commit]
+minimum_pre_commit_version: 2.20.0

@@ -1,0 +1,119 @@
+name: Bug Report
+description: File a bug report to help us improve
+title: "[Bug]: "
+labels: ["bug", "triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of find-file-type are you running?
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      options:
+        - "3.8"
+        - "3.9"
+        - "3.10"
+        - "3.11"
+        - "3.12"
+        - "Other (specify in description)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - "Linux"
+        - "macOS"
+        - "Windows"
+        - "Other (specify in description)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "I expected the file to be detected as..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: "Instead, the file was detected as..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide step-by-step instructions to reproduce the issue
+      placeholder: |
+        1. Create a file with content...
+        2. Run command `fft filename.ext`
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample-files
+    attributes:
+      label: Sample Files
+      description: If possible, provide sample files or content that reproduce the issue
+      placeholder: "Paste file content here or describe the file type/structure"
+
+  - type: textarea
+    id: command-used
+    attributes:
+      label: Command Used
+      description: What exact command did you run?
+      placeholder: "fft --verbose /path/to/file.ext"
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Output/Error Message
+      description: Paste the complete output or error message
+      render: shell
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify you have completed the following
+      options:
+        - label: I have searched existing issues to ensure this bug hasn't been reported
+          required: true
+        - label: I have provided all the requested information
+          required: true
+        - label: I am using the latest version of find-file-type
+          required: false
