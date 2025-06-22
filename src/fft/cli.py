@@ -104,12 +104,14 @@ def main(
     verbose: bool,
     quiet: bool,
     test_type: str,
-    filter_type: List[str],
+    filter_type: tuple,
     include_directories: bool,
     max_depth: int,
     paths: tuple,
 ) -> None:
-    r"""Find File Type (fft) - Determine file types using filesystem, magic, and language tests.
+    r"""Find File Type (fft).
+
+    Determine file types using filesystem, magic, and language tests.
 
     Analyzes files and directories to determine their types using a three-stage
     approach:
@@ -126,7 +128,7 @@ def main(
 
         fft --verbose /home/user/code     # Detailed analysis
 
-        fft --filter-type "Python source" \
+        fft --filter-type "Python source" \\
             --filter-type "JavaScript source" .
                                           # Show only specific file types
 
@@ -134,10 +136,10 @@ def main(
     """
     # If no paths provided, use current directory
     if not paths:
-        paths = ["."]
+        paths = (".",)
 
     # Convert string paths to Path objects
-    path_objects = [Path(p) for p in list(paths)]
+    path_objects: List[Path] = [Path(p) for p in paths]
 
     # Initialize detector
     detector = FileTypeDetector()
@@ -173,9 +175,10 @@ def main(
                 # Apply test type filter
                 if test_type != "all" and result.test_type.value != test_type:
                     # Re-run detection with specific test type
-                    result = _run_specific_test(detector, file_path, test_type)
-                    if not result:
+                    specific_result = _run_specific_test(detector, file_path, test_type)
+                    if not specific_result:
                         continue
+                    result = specific_result
 
                 # Apply file type filter
                 if filter_type and result.file_type.value not in filter_type:
@@ -232,7 +235,8 @@ def _display_result(result: DetectionResult, verbose: bool, quiet: bool) -> None
 
         if result.details:
             click.echo(
-                f"{result.file_path}: {result.file_type.value} {test_info} - {result.details}"
+                f"{result.file_path}: {result.file_type.value} {test_info}"
+                f" - {result.details}"
             )
         else:
             click.echo(f"{result.file_path}: {result.file_type.value} {test_info}")

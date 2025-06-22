@@ -30,31 +30,31 @@ from fft.types import DetectionMethod, DetectionResult, FileType
 class TestDetectionMethodEnum:
     """Test cases for the DetectionMethod enum."""
 
-    def test_test_type_values(self):
+    def test_test_type_values(self) -> None:
         """Test that DetectionMethod enum has correct values."""
         assert DetectionMethod.FILESYSTEM.value == "filesystem"
         assert DetectionMethod.MAGIC.value == "magic"
         assert DetectionMethod.LANGUAGE.value == "language"
 
-    def test_test_type_enum_members(self):
+    def test_test_type_enum_members(self) -> None:
         """Test that DetectionMethod enum has all expected members."""
         expected_members = {"FILESYSTEM", "MAGIC", "LANGUAGE"}
         actual_members = {member.name for member in DetectionMethod}
         assert actual_members == expected_members
 
-    def test_test_type_string_representation(self):
+    def test_test_type_string_representation(self) -> None:
         """Test string representation of DetectionMethod enum members."""
         assert str(DetectionMethod.FILESYSTEM) == "DetectionMethod.FILESYSTEM"
         assert str(DetectionMethod.MAGIC) == "DetectionMethod.MAGIC"
         assert str(DetectionMethod.LANGUAGE) == "DetectionMethod.LANGUAGE"
 
-    def test_test_type_equality(self):
+    def test_test_type_equality(self) -> None:
         """Test equality comparison of DetectionMethod enum members."""
         assert DetectionMethod.FILESYSTEM == DetectionMethod.FILESYSTEM
         assert DetectionMethod.FILESYSTEM != DetectionMethod.MAGIC
         assert DetectionMethod.FILESYSTEM != DetectionMethod.LANGUAGE
 
-    def test_test_type_iteration(self):
+    def test_test_type_iteration(self) -> None:
         """Test iterating over DetectionMethod enum."""
         test_types = list(DetectionMethod)
         assert len(test_types) == 3
@@ -66,7 +66,7 @@ class TestDetectionMethodEnum:
 class TestFileTypeEnum:
     """Test cases for the FileType enum."""
 
-    def test_programming_language_file_types(self):
+    def test_programming_language_file_types(self) -> None:
         """Test programming language file type values."""
         assert FileType.PYTHON.value == "Python source"
         assert FileType.JAVASCRIPT.value == "JavaScript source"
@@ -82,7 +82,7 @@ class TestFileTypeEnum:
         assert FileType.POWERSHELL.value == "PowerShell script"
         assert FileType.BATCH.value == "Batch file"
 
-    def test_web_technology_file_types(self):
+    def test_web_technology_file_types(self) -> None:
         """Test web technology file type values."""
         assert FileType.HTML.value == "HTML document"
         assert FileType.CSS.value == "CSS stylesheet"
@@ -90,7 +90,7 @@ class TestFileTypeEnum:
         assert FileType.JSON.value == "JSON data"
         assert FileType.YAML.value == "YAML data"
 
-    def test_document_file_types(self):
+    def test_document_file_types(self) -> None:
         """Test document file type values."""
         assert FileType.PDF.value == "PDF document"
         assert FileType.WORD.value == "Microsoft Word document"
@@ -99,7 +99,7 @@ class TestFileTypeEnum:
         assert FileType.TEXT.value == "Text file"
         assert FileType.MARKDOWN.value == "Markdown document"
 
-    def test_image_file_types(self):
+    def test_image_file_types(self) -> None:
         """Test image file type values."""
         assert FileType.JPEG.value == "JPEG image"
         assert FileType.PNG.value == "PNG image"
@@ -109,7 +109,7 @@ class TestFileTypeEnum:
         assert FileType.BMP.value == "BMP image"
         assert FileType.WEBP.value == "WebP image"
 
-    def test_audio_video_file_types(self):
+    def test_audio_video_file_types(self) -> None:
         """Test audio/video file type values."""
         assert FileType.MP3.value == "MP3 audio"
         assert FileType.MP4.value == "MP4 video"
@@ -117,7 +117,7 @@ class TestFileTypeEnum:
         assert FileType.WAV.value == "WAV audio"
         assert FileType.FLAC.value == "FLAC audio"
 
-    def test_archive_file_types(self):
+    def test_archive_file_types(self) -> None:
         """Test archive file type values."""
         assert FileType.ZIP.value == "ZIP archive"
         assert FileType.TAR.value == "TAR archive"
@@ -125,20 +125,20 @@ class TestFileTypeEnum:
         assert FileType.RAR.value == "RAR archive"
         assert FileType.SEVEN_ZIP.value == "7-Zip archive"
 
-    def test_executable_file_types(self):
+    def test_executable_file_types(self) -> None:
         """Test executable file type values."""
         assert FileType.ELF.value == "ELF executable"
         assert FileType.PE.value == "PE executable"
         assert FileType.MACH_O.value == "Mach-O executable"
 
-    def test_data_format_file_types(self):
+    def test_data_format_file_types(self) -> None:
         """Test data format file type values."""
         assert FileType.CSV.value == "CSV data"
         assert FileType.TSV.value == "TSV data"
         assert FileType.LOG.value == "Log file"
         assert FileType.CONFIG.value == "Configuration file"
 
-    def test_special_file_types(self):
+    def test_special_file_types(self) -> None:
         """Test special file type values."""
         assert FileType.BINARY.value == "Binary file"
         assert FileType.EMPTY.value == "Empty file"
@@ -146,7 +146,7 @@ class TestFileTypeEnum:
         assert FileType.DIRECTORY.value == "Directory"
         assert FileType.UNKNOWN.value == "Unknown file type"
 
-    def test_file_type_enum_completeness(self):
+    def test_file_type_enum_completeness(self) -> None:
         """Test that FileType enum contains expected number of members."""
         # Count all the file types to ensure none are missing
         programming_langs = 13  # PYTHON through BATCH
@@ -174,24 +174,24 @@ class TestFileTypeEnum:
         actual_total = len(list(FileType))
         assert actual_total == expected_total
 
-    def test_file_type_string_representation(self):
+    def test_file_type_string_representation(self) -> None:
         """Test string representation of FileType enum members."""
         assert str(FileType.PYTHON) == "FileType.PYTHON"
         assert str(FileType.JAVASCRIPT) == "FileType.JAVASCRIPT"
         assert str(FileType.UNKNOWN) == "FileType.UNKNOWN"
 
-    def test_file_type_equality(self):
+    def test_file_type_equality(self) -> None:
         """Test equality comparison of FileType enum members."""
         assert FileType.PYTHON == FileType.PYTHON
         assert FileType.PYTHON != FileType.JAVASCRIPT
         assert FileType.PYTHON != FileType.UNKNOWN
 
-    def test_file_type_unique_values(self):
+    def test_file_type_unique_values(self) -> None:
         """Test that all FileType enum values are unique."""
         values = [file_type.value for file_type in FileType]
         assert len(values) == len(set(values))  # No duplicates
 
-    def test_file_type_categories(self):
+    def test_file_type_categories(self) -> None:
         """Test that we can categorize file types."""
         programming_types = {
             FileType.PYTHON,
@@ -223,7 +223,7 @@ class TestFileTypeEnum:
 class TestDetectionResult:
     """Test cases for the DetectionResult dataclass."""
 
-    def test_detection_result_creation(self):
+    def test_detection_result_creation(self) -> None:
         """Test creating a DetectionResult instance."""
         file_path = Path("test.py")
         result = DetectionResult(
@@ -239,7 +239,7 @@ class TestDetectionResult:
         assert result.confidence == 0.9
         assert result.details is None
 
-    def test_detection_result_with_details(self):
+    def test_detection_result_with_details(self) -> None:
         """Test creating a DetectionResult with details."""
         file_path = Path("test.py")
         result = DetectionResult(
@@ -256,7 +256,7 @@ class TestDetectionResult:
         assert result.confidence == 0.8
         assert result.details == "Extension: .py"
 
-    def test_detection_result_str_without_details(self):
+    def test_detection_result_str_without_details(self) -> None:
         """Test string representation without details."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -268,7 +268,7 @@ class TestDetectionResult:
         expected = "test.py: Python source"
         assert str(result) == expected
 
-    def test_detection_result_str_with_details(self):
+    def test_detection_result_str_with_details(self) -> None:
         """Test string representation with details."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -281,7 +281,7 @@ class TestDetectionResult:
         expected = "test.py: Python source (Extension: .py)"
         assert str(result) == expected
 
-    def test_detection_result_str_with_empty_details(self):
+    def test_detection_result_str_with_empty_details(self) -> None:
         """Test string representation with empty details."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -295,7 +295,7 @@ class TestDetectionResult:
         expected = "test.py: Python source"
         assert str(result) == expected
 
-    def test_detection_result_equality(self):
+    def test_detection_result_equality(self) -> None:
         """Test equality comparison of DetectionResult instances."""
         result1 = DetectionResult(
             file_path=Path("test.py"),
@@ -321,7 +321,7 @@ class TestDetectionResult:
         assert result1 == result2
         assert result1 != result3
 
-    def test_detection_result_dataclass_fields(self):
+    def test_detection_result_dataclass_fields(self) -> None:
         """Test that DetectionResult has the expected dataclass fields."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -338,7 +338,7 @@ class TestDetectionResult:
         assert hasattr(result, "confidence")
         assert hasattr(result, "details")
 
-    def test_detection_result_confidence_range(self):
+    def test_detection_result_confidence_range(self) -> None:
         """Test DetectionResult with various confidence values."""
         # Test boundary values
         for confidence in [0.0, 0.1, 0.5, 0.9, 1.0]:
@@ -350,7 +350,7 @@ class TestDetectionResult:
             )
             assert result.confidence == confidence
 
-    def test_detection_result_with_different_file_types(self):
+    def test_detection_result_with_different_file_types(self) -> None:
         """Test DetectionResult with various file types."""
         test_cases = [
             (FileType.PYTHON, "Python source"),
@@ -371,7 +371,7 @@ class TestDetectionResult:
             assert result.file_type == file_type
             assert file_type.value == expected_value
 
-    def test_detection_result_with_different_test_types(self):
+    def test_detection_result_with_different_test_types(self) -> None:
         """Test DetectionResult with different test types."""
         test_types = [
             DetectionMethod.FILESYSTEM,
@@ -388,7 +388,7 @@ class TestDetectionResult:
             )
             assert result.test_type == test_type
 
-    def test_detection_result_with_complex_path(self):
+    def test_detection_result_with_complex_path(self) -> None:
         """Test DetectionResult with complex file paths."""
         complex_paths = [
             Path("simple.py"),
@@ -409,7 +409,7 @@ class TestDetectionResult:
             assert result.file_path == path
             assert str(result).startswith(str(path))
 
-    def test_detection_result_repr(self):
+    def test_detection_result_repr(self) -> None:
         """Test repr representation of DetectionResult."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -431,7 +431,7 @@ class TestDetectionResult:
 class TestTypesIntegration:
     """Integration tests for types working together."""
 
-    def test_all_test_types_with_all_file_types(self):
+    def test_all_test_types_with_all_file_types(self) -> None:
         """Test that any DetectionMethod can be used with any FileType."""
         # This tests that our type system is consistent
         for test_type in DetectionMethod:
@@ -446,7 +446,7 @@ class TestTypesIntegration:
                 assert result.test_type == test_type
                 assert result.file_type == file_type
 
-    def test_realistic_detection_scenarios(self):
+    def test_realistic_detection_scenarios(self) -> None:
         """Test realistic file detection scenarios."""
         scenarios = [
             # Filesystem detection scenarios
@@ -542,7 +542,7 @@ class TestTypesIntegration:
             if details:
                 assert details in str_repr
 
-    def test_enum_membership(self):
+    def test_enum_membership(self) -> None:
         """Test that enum values are proper members."""
         # Test that we can check membership
         assert FileType.PYTHON in FileType
@@ -557,7 +557,7 @@ class TestTypesIntegration:
         assert "FILESYSTEM" in test_types_by_name
         assert "MAGIC" in test_types_by_name
 
-    def test_enum_iteration_order(self):
+    def test_enum_iteration_order(self) -> None:
         """Test that enum iteration is consistent."""
         # Test that iteration order is deterministic
         file_types_1 = list(FileType)
@@ -568,7 +568,7 @@ class TestTypesIntegration:
         test_types_2 = list(DetectionMethod)
         assert test_types_1 == test_types_2
 
-    def test_enum_hashability(self):
+    def test_enum_hashability(self) -> None:
         """Test that enum members are hashable and can be used in sets/dicts."""
         # FileType enum members should be hashable
         file_type_set = {FileType.PYTHON, FileType.JAVASCRIPT, FileType.PYTHON}
@@ -595,7 +595,7 @@ class TestTypesIntegration:
         assert test_type_dict[DetectionMethod.MAGIC] == 2
         assert test_type_dict[DetectionMethod.LANGUAGE] == 3
 
-    def test_detection_result_immutability(self):
+    def test_detection_result_immutability(self) -> None:
         """Test that DetectionResult behaves as expected with dataclass."""
         result = DetectionResult(
             file_path=Path("test.py"),

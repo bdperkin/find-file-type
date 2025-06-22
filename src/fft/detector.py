@@ -20,10 +20,11 @@
 
 """Core file type detection logic."""
 
+import contextlib
 import re
 import stat
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 try:
     import magic
@@ -56,7 +57,7 @@ class FileTypeDetector:
                 except Exception:
                     self._magic = None
 
-    def detect_file_type(self, file_path: Path) -> DetectionResult:
+    def detect_file_type(self, file_path: Union[str, Path]) -> DetectionResult:
         """Detect file type using the three-stage approach.
 
         Args:
@@ -65,7 +66,7 @@ class FileTypeDetector:
         Returns:
             DetectionResult with detected file type and metadata
         """
-        # Convert to Path object if string
+        # Convert string to Path if needed
         if isinstance(file_path, str):
             file_path = Path(file_path)
 
@@ -96,7 +97,7 @@ class FileTypeDetector:
 
         # Final fallback - check if it's a regular file with content
         if file_path.is_file():
-            try:
+            with contextlib.suppress(OSError):
                 if file_path.stat().st_size > 0:
                     # Try to read a small sample to see if it's binary
                     with open(file_path, "rb") as f:
@@ -112,8 +113,6 @@ class FileTypeDetector:
                             confidence=0.8,
                             details="Binary content detected",
                         )
-            except OSError:
-                pass
 
         # Default fallback
         return DetectionResult(
@@ -241,6 +240,7 @@ class FileTypeDetector:
                 "html": FileType.HTML,
                 "xml": FileType.XML,
                 "json": FileType.JSON,
+                "python": FileType.PYTHON,
             }
 
             for pattern, file_type in magic_mappings.items():

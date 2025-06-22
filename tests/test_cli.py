@@ -35,7 +35,7 @@ from fft.types import DetectionMethod, DetectionResult, FileType
 class TestCLI:
     """Test cases for CLI functionality."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.runner = CliRunner()
         self.temp_dir = Path(tempfile.mkdtemp())
@@ -59,13 +59,13 @@ class TestCLI:
         self.sub_python_file = self.sub_dir / "nested.py"
         self.sub_python_file.write_text("# Nested Python file")
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up test fixtures."""
         import shutil
 
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
-    def test_help_option(self):
+    def test_help_option(self) -> None:
         """Test --help option displays help text."""
         result = self.runner.invoke(main, ["--help"])
         assert result.exit_code == 0
@@ -75,20 +75,20 @@ class TestCLI:
         assert "--quiet" in result.output
         assert "--test-type" in result.output
 
-    def test_version_option(self):
+    def test_version_option(self) -> None:
         """Test --version option displays version."""
         result = self.runner.invoke(main, ["--version"])
         assert result.exit_code == 0
         assert "version" in result.output.lower()
 
-    def test_single_file_analysis(self):
+    def test_single_file_analysis(self) -> None:
         """Test analyzing a single file."""
         result = self.runner.invoke(main, [str(self.python_file)])
         assert result.exit_code == 0
         assert str(self.python_file) in result.output
         assert "Python source" in result.output
 
-    def test_multiple_files_analysis(self):
+    def test_multiple_files_analysis(self) -> None:
         """Test analyzing multiple files."""
         result = self.runner.invoke(main, [str(self.python_file), str(self.js_file)])
         assert result.exit_code == 0
@@ -97,14 +97,14 @@ class TestCLI:
         assert "Python source" in result.output
         assert "JavaScript source" in result.output
 
-    def test_directory_analysis(self):
+    def test_directory_analysis(self) -> None:
         """Test analyzing a directory."""
         result = self.runner.invoke(main, [str(self.temp_dir)])
         assert result.exit_code == 0
         # Should find files in the directory
         assert "Python source" in result.output or "JavaScript source" in result.output
 
-    def test_verbose_mode(self):
+    def test_verbose_mode(self) -> None:
         """Test --verbose option provides detailed output."""
         result = self.runner.invoke(main, ["--verbose", str(self.python_file)])
         assert result.exit_code == 0
@@ -120,7 +120,7 @@ class TestCLI:
             or "Shebang:" in result.output
         )
 
-    def test_quiet_mode(self):
+    def test_quiet_mode(self) -> None:
         """Test --quiet option provides minimal output."""
         result = self.runner.invoke(main, ["--quiet", str(self.python_file)])
         assert result.exit_code == 0
@@ -130,21 +130,21 @@ class TestCLI:
         assert "confidence" not in result.output
         assert "Extension:" not in result.output
 
-    def test_verbose_with_multiple_files_shows_summary(self):
+    def test_verbose_with_multiple_files_shows_summary(self) -> None:
         """Test verbose mode shows summary for multiple files."""
         result = self.runner.invoke(main, ["--verbose", str(self.temp_dir)])
         assert result.exit_code == 0
         assert "Summary:" in result.output
         assert "files identified" in result.output
 
-    def test_include_directories_option(self):
+    def test_include_directories_option(self) -> None:
         """Test --include-directories option includes directories in output."""
         result = self.runner.invoke(main, ["--include-directories", str(self.temp_dir)])
         assert result.exit_code == 0
         # Should include the subdirectory
         assert str(self.sub_dir) in result.output or "Directory" in result.output
 
-    def test_exclude_directories_by_default(self):
+    def test_exclude_directories_by_default(self) -> None:
         """Test directories are excluded by default."""
         result = self.runner.invoke(main, [str(self.temp_dir)])
         assert result.exit_code == 0
@@ -154,7 +154,7 @@ class TestCLI:
         # By default, directories should not be shown
         assert len(directory_lines) == 0
 
-    def test_test_type_filesystem(self):
+    def test_test_type_filesystem(self) -> None:
         """Test --test-type filesystem option."""
         result = self.runner.invoke(
             main, ["--test-type", "filesystem", "--verbose", str(self.python_file)]
@@ -164,7 +164,7 @@ class TestCLI:
         # Should not have magic or language detection info
         assert "Magic:" not in result.output
 
-    def test_test_type_magic(self):
+    def test_test_type_magic(self) -> None:
         """Test --test-type magic option."""
         result = self.runner.invoke(
             main, ["--test-type", "magic", "--verbose", str(self.python_file)]
@@ -173,7 +173,7 @@ class TestCLI:
         # May or may not find magic signatures, but should attempt magic detection
         assert result.exit_code == 0  # Command should complete successfully
 
-    def test_test_type_language(self):
+    def test_test_type_language(self) -> None:
         """Test --test-type language option."""
         result = self.runner.invoke(
             main, ["--test-type", "language", "--verbose", str(self.python_file)]
@@ -182,7 +182,7 @@ class TestCLI:
         # Should use language detection
         assert result.exit_code == 0  # Command should complete successfully
 
-    def test_filter_type_single(self):
+    def test_filter_type_single(self) -> None:
         """Test --filter-type option with single type."""
         result = self.runner.invoke(
             main, ["--filter-type", "Python source", str(self.temp_dir)]
@@ -192,7 +192,7 @@ class TestCLI:
         # Should not show JavaScript files
         assert "JavaScript source" not in result.output
 
-    def test_filter_type_multiple(self):
+    def test_filter_type_multiple(self) -> None:
         """Test --filter-type option with multiple types."""
         result = self.runner.invoke(
             main,
@@ -209,7 +209,7 @@ class TestCLI:
         # Note: output may vary based on what files exist, but command should succeed
         assert result.exit_code == 0
 
-    def test_max_depth_option(self):
+    def test_max_depth_option(self) -> None:
         """Test --max-depth option limits recursion."""
         # Create nested directory structure
         deep_dir = self.sub_dir / "level2" / "level3"
@@ -223,7 +223,7 @@ class TestCLI:
         # Should find files in temp_dir and immediate subdirectory
         # but not the deeply nested file
 
-    def test_no_paths_uses_current_directory(self):
+    def test_no_paths_uses_current_directory(self) -> None:
         """Test that no paths defaults to current directory."""
         with patch("fft.cli.Path.cwd", return_value=self.temp_dir):
             result = self.runner.invoke(main, [])
@@ -231,7 +231,7 @@ class TestCLI:
             # Should analyze files in the temp directory
             assert len(result.output.strip()) > 0
 
-    def test_nonexistent_file_error(self):
+    def test_nonexistent_file_error(self) -> None:
         """Test error handling for nonexistent files."""
         nonexistent_file = self.temp_dir / "does_not_exist.txt"
         result = self.runner.invoke(main, [str(nonexistent_file)])
@@ -239,7 +239,7 @@ class TestCLI:
         # Should show an error message about the nonexistent path
         assert "does not exist" in result.output or "Error:" in result.output
 
-    def test_permission_error_handling(self):
+    def test_permission_error_handling(self) -> None:
         """Test graceful handling of permission errors."""
         # Create a file and then mock a permission error
         with patch("pathlib.Path.rglob") as mock_rglob:
@@ -248,7 +248,7 @@ class TestCLI:
             assert result.exit_code == 0
             # Should handle the error gracefully
 
-    def test_keyboard_interrupt_handling(self):
+    def test_keyboard_interrupt_handling(self) -> None:
         """Test handling of keyboard interrupts."""
         with patch("fft.cli.walk_paths") as mock_walk:
             mock_walk.side_effect = KeyboardInterrupt()
@@ -256,7 +256,7 @@ class TestCLI:
             assert result.exit_code == 1
             assert "Interrupted by user" in result.output
 
-    def test_error_processing_with_verbose(self):
+    def test_error_processing_with_verbose(self) -> None:
         """Test error handling during file processing with verbose mode."""
         with patch("fft.detector.FileTypeDetector.detect_file_type") as mock_detect:
             mock_detect.side_effect = Exception("Test error")
@@ -264,7 +264,7 @@ class TestCLI:
             assert result.exit_code == 0
             assert "Error processing" in result.output
 
-    def test_error_processing_without_verbose(self):
+    def test_error_processing_without_verbose(self) -> None:
         """Test error handling during file processing without verbose mode."""
         with patch("fft.detector.FileTypeDetector.detect_file_type") as mock_detect:
             mock_detect.side_effect = Exception("Test error")
@@ -277,7 +277,7 @@ class TestCLI:
 class TestWalkPaths:
     """Test cases for the walk_paths function."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.temp_dir = Path(tempfile.mkdtemp())
 
@@ -290,19 +290,19 @@ class TestWalkPaths:
         self.file2 = self.subdir / "file2.txt"
         self.file2.write_text("File 2")
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up test fixtures."""
         import shutil
 
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
-    def test_walk_single_file(self):
+    def test_walk_single_file(self) -> None:
         """Test walking a single file."""
         paths = list(walk_paths([self.file1]))
         assert len(paths) == 1
         assert paths[0] == self.file1
 
-    def test_walk_directory(self):
+    def test_walk_directory(self) -> None:
         """Test walking a directory."""
         paths = list(walk_paths([self.temp_dir]))
         # Should find all files in the directory tree
@@ -311,23 +311,21 @@ class TestWalkPaths:
         assert self.file1 in file_paths
         assert self.file2 in file_paths
 
-    def test_walk_nonexistent_path(self):
+    def test_walk_nonexistent_path(self) -> None:
         """Test walking a nonexistent path."""
         nonexistent = self.temp_dir / "does_not_exist"
 
         # Capture stderr to check for error message
-        from click.testing import CliRunner
-
         paths = list(walk_paths([nonexistent]))
         assert len(paths) == 0  # Should yield no paths
 
-    def test_walk_multiple_paths(self):
+    def test_walk_multiple_paths(self) -> None:
         """Test walking multiple paths."""
         paths = list(walk_paths([self.file1, self.subdir]))
         assert self.file1 in paths
         assert self.file2 in paths
 
-    def test_walk_symlink(self):
+    def test_walk_symlink(self) -> None:
         """Test walking symbolic links."""
         # Create a symbolic link
         link_target = self.temp_dir / "link_target.txt"
@@ -347,7 +345,7 @@ class TestWalkPaths:
 class TestDisplayResult:
     """Test cases for the _display_result function."""
 
-    def test_display_result_quiet_mode(self):
+    def test_display_result_quiet_mode(self) -> None:
         """Test displaying result in quiet mode."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -375,7 +373,7 @@ class TestDisplayResult:
             assert "confidence" not in captured
             assert "Extension:" not in captured
 
-    def test_display_result_verbose_mode(self):
+    def test_display_result_verbose_mode(self) -> None:
         """Test displaying result in verbose mode."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -402,7 +400,7 @@ class TestDisplayResult:
             assert "80% confidence" in captured
             assert "Extension: .py" in captured
 
-    def test_display_result_standard_mode(self):
+    def test_display_result_standard_mode(self) -> None:
         """Test displaying result in standard mode."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -428,7 +426,7 @@ class TestDisplayResult:
             assert "test.py: Python source" in captured
             # Should use the __str__ method of DetectionResult
 
-    def test_display_result_verbose_without_details(self):
+    def test_display_result_verbose_without_details(self) -> None:
         """Test displaying result in verbose mode without details."""
         result = DetectionResult(
             file_path=Path("test.py"),
@@ -459,40 +457,40 @@ class TestDisplayResult:
 class TestRunSpecificTest:
     """Test cases for the _run_specific_test function."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.detector = FileTypeDetector()
         self.temp_dir = Path(tempfile.mkdtemp())
         self.test_file = self.temp_dir / "test.py"
         self.test_file.write_text("print('test')")
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up test fixtures."""
         import shutil
 
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
-    def test_run_filesystem_test(self):
+    def test_run_filesystem_test(self) -> None:
         """Test running filesystem-specific test."""
         result = _run_specific_test(self.detector, self.test_file, "filesystem")
         assert result is not None
         assert result.test_type == DetectionMethod.FILESYSTEM
 
-    def test_run_magic_test(self):
+    def test_run_magic_test(self) -> None:
         """Test running magic-specific test."""
         result = _run_specific_test(self.detector, self.test_file, "magic")
         # Result may be None if magic detection doesn't find anything
         if result:
             assert result.test_type == DetectionMethod.MAGIC
 
-    def test_run_language_test(self):
+    def test_run_language_test(self) -> None:
         """Test running language-specific test."""
         result = _run_specific_test(self.detector, self.test_file, "language")
         # Should detect Python content
         if result:
             assert result.test_type == DetectionMethod.LANGUAGE
 
-    def test_run_invalid_test_type(self):
+    def test_run_invalid_test_type(self) -> None:
         """Test running with invalid test type."""
         result = _run_specific_test(self.detector, self.test_file, "invalid")
         assert result is None
@@ -501,7 +499,7 @@ class TestRunSpecificTest:
 class TestCLIIntegration:
     """Integration tests for the complete CLI workflow."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.runner = CliRunner()
         self.temp_dir = Path(tempfile.mkdtemp())
@@ -576,13 +574,13 @@ This is a test project for the fft tool.
         # Empty file
         (self.temp_dir / "empty.log").touch()
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up test fixtures."""
         import shutil
 
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
-    def test_analyze_project_structure(self):
+    def test_analyze_project_structure(self) -> None:
         """Test analyzing a complete project structure."""
         result = self.runner.invoke(main, [str(self.temp_dir)])
         assert result.exit_code == 0
@@ -593,7 +591,7 @@ This is a test project for the fft tool.
         assert "JSON data" in result.output
         assert "Markdown document" in result.output
 
-    def test_filter_python_files_only(self):
+    def test_filter_python_files_only(self) -> None:
         """Test filtering to show only Python files."""
         result = self.runner.invoke(
             main, ["--filter-type", "Python source", str(self.temp_dir)]
@@ -605,7 +603,7 @@ This is a test project for the fft tool.
         assert "JavaScript source" not in result.output
         assert "JSON data" not in result.output
 
-    def test_verbose_analysis_with_summary(self):
+    def test_verbose_analysis_with_summary(self) -> None:
         """Test verbose analysis shows detailed information and summary."""
         result = self.runner.invoke(main, ["--verbose", str(self.temp_dir)])
         assert result.exit_code == 0
@@ -622,7 +620,7 @@ This is a test project for the fft tool.
         assert "Summary:" in result.output
         assert "files identified" in result.output
 
-    def test_quiet_mode_minimal_output(self):
+    def test_quiet_mode_minimal_output(self) -> None:
         """Test quiet mode provides minimal output."""
         result = self.runner.invoke(main, ["--quiet", str(self.temp_dir)])
         assert result.exit_code == 0
@@ -636,7 +634,7 @@ This is a test project for the fft tool.
             assert "confidence" not in line
             assert "Extension:" not in line
 
-    def test_language_detection_only(self):
+    def test_language_detection_only(self) -> None:
         """Test using only language detection."""
         result = self.runner.invoke(
             main, ["--test-type", "language", "--verbose", str(self.temp_dir)]

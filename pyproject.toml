@@ -43,6 +43,7 @@ dev = [
     "pre-commit>=3.0.0",
     "isort>=5.12.0",
     "bandit[toml]>=1.7.5",
+    "types-click>=8.0.0",
 ]
 
 [project.urls]
@@ -68,6 +69,10 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 mypy_path = "src"
 packages = ["fft"]
+
+[[tool.mypy.overrides]]
+module = ["magic", "click", "click.testing"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
