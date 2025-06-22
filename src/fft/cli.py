@@ -22,7 +22,7 @@
 
 import sys
 from pathlib import Path
-from typing import Generator, List
+from typing import Generator, List, Optional
 
 import click
 
@@ -32,8 +32,7 @@ from .types import DetectionResult, FileType
 
 
 def walk_paths(paths: List[Path]) -> Generator[Path, None, None]:
-    """
-    Walk through paths, yielding individual files.
+    """Walk through paths, yielding individual files.
 
     Args:
         paths: List of file or directory paths
@@ -86,7 +85,8 @@ def walk_paths(paths: List[Path]) -> Generator[Path, None, None]:
     "--filter-type",
     "-f",
     multiple=True,
-    help="Filter results to only show specific file types (can be used multiple times).",
+    help="Filter results to only show specific file types"
+    " (can be used multiple times).",
 )
 @click.option(
     "--include-directories",
@@ -109,10 +109,10 @@ def main(
     max_depth: int,
     paths: tuple,
 ) -> None:
-    """
-    Find File Type (fft) - Determine file types using filesystem, magic, and language tests.
+    r"""Find File Type (fft) - Determine file types using filesystem, magic, and language tests.
 
-    Analyzes files and directories to determine their types using a three-stage approach:
+    Analyzes files and directories to determine their types using a three-stage
+    approach:
     1. Filesystem tests (extensions, permissions, attributes)
     2. Magic tests (file signatures and magic bytes)
     3. Language tests (content analysis and pattern matching)
@@ -120,14 +120,14 @@ def main(
     If no paths are specified, analyzes the current directory.
 
     Examples:
-
         fft myfile.txt                    # Analyze a single file
 
         fft dir1/ dir2/ file.py           # Analyze directories and files
 
         fft --verbose /home/user/code     # Detailed analysis
 
-        fft --filter-type "Python source" --filter-type "JavaScript source" .
+        fft --filter-type "Python source" \
+            --filter-type "JavaScript source" .
                                           # Show only specific file types
 
         fft --test-type magic .           # Use only magic byte detection
@@ -137,7 +137,7 @@ def main(
         paths = ["."]
 
     # Convert string paths to Path objects
-    path_objects = [Path(p) for p in paths]
+    path_objects = [Path(p) for p in list(paths)]
 
     # Initialize detector
     detector = FileTypeDetector()
@@ -171,17 +171,15 @@ def main(
                     continue
 
                 # Apply test type filter
-                if test_type != "all":
-                    if result.test_type.value != test_type:
-                        # Re-run detection with specific test type
-                        result = _run_specific_test(detector, file_path, test_type)
-                        if not result:
-                            continue
+                if test_type != "all" and result.test_type.value != test_type:
+                    # Re-run detection with specific test type
+                    result = _run_specific_test(detector, file_path, test_type)
+                    if not result:
+                        continue
 
                 # Apply file type filter
-                if filter_type:
-                    if result.file_type.value not in filter_type:
-                        continue
+                if filter_type and result.file_type.value not in filter_type:
+                    continue
 
                 # Count successful detections
                 if result.file_type != FileType.UNKNOWN:
@@ -201,16 +199,17 @@ def main(
 
     # Show summary if verbose
     if verbose and total_files > 1:
+        error_info = f", {errors} errors" if errors else ""
         click.echo(
             f"\nSummary: {detected_files}/{total_files} files identified"
-            + (f", {errors} errors" if errors else ""),
+            f"{error_info}",
             err=True,
         )
 
 
 def _run_specific_test(
     detector: FileTypeDetector, file_path: Path, test_type: str
-) -> DetectionResult:
+) -> Optional[DetectionResult]:
     """Run a specific type of test on a file."""
     if test_type == "filesystem":
         return detector._filesystem_tests(file_path)

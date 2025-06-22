@@ -23,10 +23,10 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from fft.detector import FileTypeDetector
 from fft.types import DetectionMethod, FileType
+
+# import pytest  # Used by test runner
 
 
 class TestFileTypeDetector:

@@ -26,7 +26,7 @@ from pathlib import Path
 
 
 def greet(name: str) -> None:
-    """Greet someone by name."""
+    """Print a greeting message for the given name."""
     print(f"Hello, {name}!")
 
 

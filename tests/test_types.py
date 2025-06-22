@@ -22,9 +22,9 @@
 
 from pathlib import Path
 
-import pytest
-
 from fft.types import DetectionMethod, DetectionResult, FileType
+
+# import pytest  # Used by test runner
 
 
 class TestDetectionMethodEnum:

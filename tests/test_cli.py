@@ -22,9 +22,9 @@
 
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-import pytest
+# import pytest  # Used by test runner
 from click.testing import CliRunner
 
 from fft.cli import _display_result, _run_specific_test, main, walk_paths
@@ -317,8 +317,6 @@ class TestWalkPaths:
 
         # Capture stderr to check for error message
         from click.testing import CliRunner
-
-        runner = CliRunner()
 
         paths = list(walk_paths([nonexistent]))
         assert len(paths) == 0  # Should yield no paths

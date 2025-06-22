@@ -20,11 +20,10 @@
 
 """Core file type detection logic."""
 
-import os
 import re
 import stat
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Dict, Optional
 
 try:
     import magic
@@ -58,8 +57,7 @@ class FileTypeDetector:
                     self._magic = None
 
     def detect_file_type(self, file_path: Path) -> DetectionResult:
-        """
-        Detect file type using the three-stage approach.
+        """Detect file type using the three-stage approach.
 
         Args:
             file_path: Path to the file to analyze
@@ -97,24 +95,25 @@ class FileTypeDetector:
             return result
 
         # Final fallback - check if it's a regular file with content
-        try:
-            if file_path.is_file() and file_path.stat().st_size > 0:
-                # Try to read a small sample to see if it's binary
-                with open(file_path, "rb") as f:
-                    sample = f.read(512)
+        if file_path.is_file():
+            try:
+                if file_path.stat().st_size > 0:
+                    # Try to read a small sample to see if it's binary
+                    with open(file_path, "rb") as f:
+                        sample = f.read(512)
 
-                # Check for null bytes or high ratio of non-printable characters
-                null_bytes = sample.count(0)
-                if null_bytes > 0 or self._appears_binary(sample):
-                    return DetectionResult(
-                        file_path=file_path,
-                        file_type=FileType.BINARY,
-                        test_type=DetectionMethod.LANGUAGE,
-                        confidence=0.8,
-                        details="Binary content detected",
-                    )
-        except OSError:
-            pass
+                    # Check for null bytes or high ratio of non-printable characters
+                    null_bytes = sample.count(0)
+                    if null_bytes > 0 or self._appears_binary(sample):
+                        return DetectionResult(
+                            file_path=file_path,
+                            file_type=FileType.BINARY,
+                            test_type=DetectionMethod.LANGUAGE,
+                            confidence=0.8,
+                            details="Binary content detected",
+                        )
+            except OSError:
+                pass
 
         # Default fallback
         return DetectionResult(
@@ -274,8 +273,9 @@ class FileTypeDetector:
                     details=f"Magic: {magic_result}",
                 )
 
-        except Exception:
-            pass
+        except (OSError, UnicodeDecodeError):
+            # File reading error or encoding issue
+            return None
 
         return None
 
@@ -342,6 +342,7 @@ class FileTypeDetector:
                             details="Valid JSON structure",
                         )
                     except (json.JSONDecodeError, ImportError):
+                        # Not valid JSON or json module not available
                         pass
 
                 # Check for YAML
@@ -374,8 +375,9 @@ class FileTypeDetector:
                     confidence=0.6,
                 )
 
-        except Exception:
-            pass
+        except (OSError, UnicodeDecodeError):
+            # File reading error or encoding issue
+            return None
 
         return None
 
