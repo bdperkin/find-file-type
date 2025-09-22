@@ -5,7 +5,7 @@
 repos:
   # General file formatting and checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: '\.md$'
@@ -25,7 +25,7 @@ repos:
 
   # Python import sorting
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         args:
@@ -46,7 +46,7 @@ repos:
 
   # Python code formatting
   - repo: https://github.com/psf/black
-    rev: 23.12.1
+    rev: 25.9.0
     hooks:
       - id: black
         language_version: python3
@@ -54,7 +54,7 @@ repos:
 
   # Python linting
   - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies:
@@ -74,7 +74,7 @@ repos:
 
   # Python type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.18.2
     hooks:
       - id: mypy
         additional_dependencies: [types-setuptools]
@@ -88,7 +88,7 @@ repos:
 
   # Security linting
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.5
+    rev: 1.8.6
     hooks:
       - id: bandit
         args: ["-c", "pyproject.toml"]
@@ -96,7 +96,7 @@ repos:
 
   # Python upgrade syntax
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.0
+    rev: v3.20.0
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
