@@ -509,8 +509,7 @@ class TestCLIIntegration:
         self.src_dir.mkdir()
 
         # Python files
-        (self.src_dir / "main.py").write_text(
-            '''#!/usr/bin/env python3
+        (self.src_dir / "main.py").write_text('''#!/usr/bin/env python3
 """Main module."""
 import sys
 
@@ -519,20 +518,16 @@ def main():
 
 if __name__ == "__main__":
     main()
-'''
-        )
+''')
 
-        (self.src_dir / "utils.py").write_text(
-            '''"""Utility functions."""
+        (self.src_dir / "utils.py").write_text('''"""Utility functions."""
 
 def helper_function(x):
     return x * 2
-'''
-        )
+''')
 
         # JavaScript file
-        (self.src_dir / "app.js").write_text(
-            """const express = require('express');
+        (self.src_dir / "app.js").write_text("""const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -540,20 +535,16 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000);
-"""
-        )
+""")
 
         # Config files
-        (self.temp_dir / "package.json").write_text(
-            """{
+        (self.temp_dir / "package.json").write_text("""{
   "name": "test-app",
   "version": "1.0.0",
   "main": "src/app.js"
-}"""
-        )
+}""")
 
-        (self.temp_dir / "README.md").write_text(
-            """# Test Project
+        (self.temp_dir / "README.md").write_text("""# Test Project
 
 This is a test project for the fft tool.
 
@@ -562,8 +553,7 @@ This is a test project for the fft tool.
 - Python backend
 - JavaScript frontend
 - Configuration files
-"""
-        )
+""")
 
         # Binary-like file
         binary_file = self.temp_dir / "data.bin"
